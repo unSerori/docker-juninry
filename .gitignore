@@ -4,6 +4,9 @@
 # memo
 memo.txt
 
+# .vscode
+.vscode/
+
 # volumes
 share/
 db-data/

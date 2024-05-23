@@ -1,4 +1,3 @@
-version: '3'  # docker-composeファイルの構文バージョン
 services:  # コンポースするサービスたち
     go_server:  # サービスの名前
         image: golang:1.22.2-bullseye  # pullするイメージ
@@ -6,8 +5,8 @@ services:  # コンポースするサービスたち
         volumes:  # ボリュームの保持。
             - ./go_server/share:/root/share
         build:  # ビルド設定
-            context: .  # ビルドプロセスが実行されるパス。
-            dockerfile: ./go_server/Dockerfile  # Dockerfileのパス。
+            context: ./go_server.  # ビルドプロセスが実行されるパス。
+            dockerfile: Dockerfile  # Dockerfileのパス。
         tty: true  # コンテナ内で対話的操作を可能
     mysql_server: 
         image: mysql:latest
