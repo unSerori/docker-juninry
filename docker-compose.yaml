@@ -1,0 +1,26 @@
+version: '3'  # docker-composeファイルの構文バージョン
+services:  # コンポースするサービスたち
+    go_server:  # サービスの名前
+        image: golang:1.22.2-bullseye  # pullするイメージ
+        container_name: juninry_api  # コンテナ名
+        volumes:  # ボリュームの保持。
+            - ./go_server/share:/root/share
+        build:  # ビルド設定
+            context: .  # ビルドプロセスが実行されるパス。
+            dockerfile: ./go_server/Dockerfile  # Dockerfileのパス。
+        tty: true  # コンテナ内で対話的操作を可能
+    mysql_server: 
+        image: mysql:latest
+        container_name: juninry_db
+        restart: always
+        environment:
+            TZ: "Asia/Tokyo"
+        env_file: 
+            - .env
+        ports:
+            - "3307:3306"  # ホストマシンのポートとコンテナのポートをマッピング
+        volumes:
+            - ./mysql_server/db-data:/var/lib/mysql
+        build:
+            context: .
+            dockerfile: ./mysql_server/Dockerfile
