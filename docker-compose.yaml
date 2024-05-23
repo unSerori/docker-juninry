@@ -21,6 +21,6 @@ services:  # コンポースするサービスたち
             - "3307:3306"  # ホストマシンのポートとコンテナのポートをマッピング
         volumes:
             - ./mysql_server/db-data:/var/lib/mysql
-        build:
-            context: .
-            dockerfile: ./mysql_server/Dockerfile
+        # build:
+        #     context: .
+        #     dockerfile: ./mysql_server/Dockerfile
