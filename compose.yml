@@ -5,7 +5,7 @@ services:  # コンポースするサービスたち
         volumes:  # ボリュームの保持。
             - ./go_server/share:/root/share
         build:  # ビルド設定
-            context: ./go_server.  # ビルドプロセスが実行されるパス。
+            context: ./go_server  # ビルドプロセスが実行されるパス。
             dockerfile: Dockerfile  # Dockerfileのパス。
         tty: true  # コンテナ内で対話的操作を可能
     mysql_server: 
