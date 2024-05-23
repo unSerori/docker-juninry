@@ -2,7 +2,7 @@
 
 ## 概要
 
-[juninry]のDocker開発環境。
+juninry([Golangプロジェクト](https://github.com/unSerori/juninry-api))のDocker開発環境。
 
 ### 開発環境
 
