@@ -25,6 +25,7 @@ Windowsを対象としてるが、他OSでも行けると思う。
     MYSQL_USER: ユーザ名
     MYSQL_PASSWORD: ユーザのパスワード
     MYSQL_DATABASE: 使用するdatabase名
+    TZ: タイムゾーン。通常はAsia/Tokyo
     ```
 
 4. VScodeでフォルダーを開き以下のコマンド。Docker拡張機能（[ms-azuretools.vscode-docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)）も入れておく。
