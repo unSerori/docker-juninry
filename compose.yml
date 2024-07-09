@@ -2,6 +2,8 @@ services:  # コンポースするサービスたち
     go_server:  # サービスの名前
         image: golang:1.22.2-bullseye  # pullするイメージ
         container_name: juninry_api  # コンテナ名
+        environment:
+            TZ: ${TZ}
         volumes:  # ボリュームの保持。
             - ./go_server/share:/root/share
         build:  # ビルド設定
@@ -13,7 +15,7 @@ services:  # コンポースするサービスたち
         container_name: juninry_db
         restart: always
         environment:
-            TZ: "Asia/Tokyo"
+            TZ: ${TZ}
         env_file: 
             - .env
         ports:
