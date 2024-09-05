@@ -1,12 +1,30 @@
-# docker-composeで使う.env
-.env
+# Linux/Unix specific temporary files
+.nfs*
 
-# memo
-memo.txt
+# macOS specific system files
+.DS_Store
+.AppleDouble
+__MACOSX
 
-# .vscode
+# Windows specific system files
+Desktop.ini
+
+# Editor and IDE specific temporary or configuration files
+*.swp
+*.swo
+.idea/
 .vscode/
+
+# env file
+.env
+*.env*
 
 # volumes
 share/
 db-data/
+
+# memo
+memo.*
+
+# empty directory
+!.gitignore
