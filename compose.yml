@@ -1,29 +1,27 @@
 services:  # コンポースするサービスたち
-    go_server:  # サービスの名前
-        image: golang:1.22.2-bullseye  # pullするイメージ
-        container_name: juninry_api  # コンテナ名
-        ports:
-            - "4561:4561" # ホストマシンのポートとコンテナのポートをマッピング
-        environment:
-            TZ: ${TZ}
-        volumes:  # ボリュームの保持。
-            - ./go_server/share:/root/share
+
+    go-api-srv: # サービスの名前
+        container_name: juninry-go-api  # コンテナ名
         build:  # ビルド設定
-            context: ./go_server  # ビルドプロセスが実行されるパス。
-            dockerfile: Dockerfile  # Dockerfileのパス。
-        tty: true  # コンテナ内で対話的操作を可能
-    mysql_server: 
-        image: mysql:latest
-        container_name: juninry_db
-        restart: always
-        environment:
+            context: ./go-api/  # ビルドプロセスが実行されるパス 
+            dockerfile: Dockerfile  # Dockerfileのパス
+        environment: # 環境変数
             TZ: ${TZ}
-        env_file: 
-            - .env
-        ports:
-            - "3307:3306"  # ホストマシンのポートとコンテナのポートをマッピング
-        volumes:
-            - ./mysql_server/db-data:/var/lib/mysql
-        # build:
-        #     context: .
-        #     dockerfile: ./mysql_server/Dockerfile
+        networks: # 定義したネットワークを利用
+            - db_net # dbに接続するネットワーク
+
+    mysql-db-srv: # サービスの名前
+        container_name: juninry-mysql-db # コンテナ名
+        image: mysql:latest # pullするイメージ
+        volumes: # ボリュームの保持
+            - ./mysql-db/db_data:/var/lib/mysql # DBデータをホストに保持
+        environment: # 環境変数
+            TZ: ${TZ}
+        env_file: # 環境変数のまとまりをファイルに記述して渡す
+            - .env.mysql-db
+        restart: always # コンテナの再起動
+        networks: # 定義したネットワークを利用
+            - db_net # dbに接続するネットワーク
+
+networks: # ネットワークの定義
+    db_net: # dbに接続するネットワーク
