@@ -21,7 +21,7 @@ Desktop.ini
 
 # volumes
 share/
-db-data/
+db_data/
 
 # memo
 memo.*
