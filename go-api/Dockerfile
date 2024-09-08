@@ -13,13 +13,25 @@ RUN apt update && \
 FROM base AS develop
 
 # 作業ディレクトリ
-WORKDIR /root/
+WORKDIR /root/copy
+
+# 必要なツールインストール
 
 # デバッガインストール
 RUN go install github.com/go-delve/delve/cmd/dlv@latest
 
+# 必要なファイルのコピー
+COPY .env.go-api .env
+
 # httpポートの公開 ここにクライアントがAPIを投げる
 EXPOSE 4561
+
+# 実行用のスクリプトをコピー
+COPY ./execute.sh .
+RUN chmod +x ./execute.sh
+
+# スクリプトで起動
+ENTRYPOINT [ "./execute.sh" ]
 
 # デプロイ用のステージ
 
@@ -65,4 +77,4 @@ RUN \
 # ----
 
 # ビルド済みの実行ファイルを本番環境でCMD起動
-CMD [ "juninry-go-api" ]
+ENTRYPOINT [ "juninry-go-api" ]

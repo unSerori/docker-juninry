@@ -1,8 +1,11 @@
 services: # コンポースするサービスたち
 
     go-api-srv: # サービス名
+        build: # ビルド設定
+            target: develop
         volumes:  # ボリュームの保持
             - ./go-api/share:/root/share # 開発環境
+            - "./go-api/log/:/root/log/" # log
         ports:
             - "4561:4561" # ホストマシンのポートとコンテナのポートをマッピング
         tty: true # 仮想端末(:ターミナル)をコンテナに提供し、コンテナ内で対話的操作を可能にする # なお、ttyを設定しても、compose.services.service.commandやDockerfile.CMD, ENTRYPOINTでプロセスを指定している場合はそれが終了してしまうと継続できない
