@@ -4,8 +4,8 @@
 FROM golang:1.22.2-bullseye AS base
 
 # aptでパッケージリストの更新とgitインストール
-RUN apt update && \
-    apt install -y git
+RUN apt-get update && \
+    apt-get install -y git
 
 # 開発用のステージ
 
@@ -15,10 +15,12 @@ FROM base AS develop
 # 作業ディレクトリ
 WORKDIR /root/copy
 
-# 必要なツールインストール
-
-# デバッガインストール
-RUN go install github.com/go-delve/delve/cmd/dlv@latest
+# 必要なものインストール
+RUN \
+    # ssh通信のためのクライアント
+    apt-get install -y git openssh-client && \
+    # デバッガインストール
+    go install github.com/go-delve/delve/cmd/dlv@latest
 
 # 必要なファイルのコピー
 COPY .env.go-api .env
@@ -27,11 +29,11 @@ COPY .env.go-api .env
 EXPOSE 4561
 
 # 実行用のスクリプトをコピー
-COPY ./execute.sh .
-RUN chmod +x ./execute.sh
+COPY ./init.sh .
+RUN chmod +x ./init.sh
 
 # スクリプトで起動
-ENTRYPOINT [ "./execute.sh" ]
+ENTRYPOINT [ "./init.sh" ]
 
 # デプロイ用のステージ
 
