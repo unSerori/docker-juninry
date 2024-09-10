@@ -34,7 +34,7 @@ if [ -d "/root/share/" ] && [ -z "$(ls -A "/root/share/")" ]; then # -dでディ
     echo Clone now... 2>&1 | tee -a /root/log/execute.log
 
     # ソースコードのリポジトリをクローン、
-    git clone https://github.com/unSerori/juninry-api /root/share/./
+    git clone https://github.com/unSerori/juninry-api -b develop /root/share/./
     # copyされたファイルを適切な場所に移行
     mv .env /root/share/
 else

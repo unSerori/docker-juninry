@@ -4,6 +4,7 @@ services: # コンポースするサービスたち
         container_name: juninry_dev_go-api  # コンテナ名
         build: # ビルド設定
             target: develop
+        image: juninry/go-api_dev:latest # image name
         volumes:  # ボリュームの保持
             - ../services/go-api/share:/root/share # 開発環境
             - "../services/go-api/log/:/root/log/" # log
@@ -35,7 +36,7 @@ services: # コンポースするサービスたち
             dockerfile: Dockerfile  # Dockerfileのパス
         environment: # 環境変数
             SSH_AUTH_SOCK: /root/ssh-agent/ssh_agent_socket/ssh-agent.sock # ソケットの場所
-        image: ssh-agent:latest # image name
+        image: juninry/ssh-agent:latest # image name
         volumes: # ボリュームの保持
             - type: bind  # ssh keyをホストボリュームでホストバインドマウント # short syntaxは、もしホストOSにsourceがなかったら、"ディレクトリ"を作ってしまう
               source: "${HOST_SSH_PATH:-~/.ssh}"

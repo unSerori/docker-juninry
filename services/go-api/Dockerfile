@@ -46,7 +46,7 @@ WORKDIR /root/
 # ビルド処理
 RUN \
     # ソースコードのクローン
-    git clone https://github.com/unSerori/juninry-api.git -b develop && \
+    git clone https://github.com/unSerori/juninry-api.git -b main && \
     # ビルド なお、deploy-builderイメージにgo実行環境が入ってるのでビルドツールのDLは不要
     cd ./juninry-api && \
     go build -o juninry-go-api

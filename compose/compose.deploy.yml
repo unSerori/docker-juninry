@@ -4,7 +4,7 @@ services: # コンポースするサービスたち
         container_name: juninry_dep_go-api  # コンテナ名
         build: # ビルド設定
             target: deploy-final
-        image: juninry/go-api:latest # image name\
+        image: juninry/go-api:stable # image name
         volumes: # ボリュームの保持
             - ../services/mysql-db/db_data:/var/lib/mysql # DBデータをホストに保持
         ports: # ホストマシンのポートとコンテナのポートをマッピング 
