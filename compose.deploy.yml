@@ -1,8 +1,0 @@
-services: # コンポースするサービスたち
-
-    go-api-srv: # サービス名
-        build: # ビルド設定
-            target: deploy-final
-        image: juninry/go-api:latest # image name
-        ports: # ホストマシンのポートとコンテナのポートをマッピング 
-            - "${API_DEPLOY_HOST_PORT}:4561"

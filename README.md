@@ -24,8 +24,8 @@ Windows/Macを対象としてるが、他OSでも行けると思う
     git clone git@github.com:unSerori/ddd.git
     ```
 
-3. .envファイルを作成TODO: ディレクトリ
-    - `./env`: compose.ymlでDockerfileに対する引数として使うものや、プロジェクト全体で使う変数
+3. .envファイルを作成
+    - `./compose/.env`: compose.ymlでDockerfileに対する引数として使うものや、プロジェクト全体で使う変数
 
         ```env:.env
         TZ=タイムゾーン: Asia/Tokyo
@@ -35,7 +35,7 @@ Windows/Macを対象としてるが、他OSでも行けると思う
         HOST_SSH_PATH=ホストOS上のGitHubに登録済みの鍵ファイルの場所: %USERPROFILE%\.ssh
         ```
 
-    - `./.mysql-db-srv.env`: ビルド時にmysql-db-srvコンテナーにcompose.services.service.env_fileでファイルごと与える環境変数たち
+    - `./.env.mysql-db-srv.env`: ビルド時にmysql-db-srvコンテナーにcompose.services.service.env_fileでファイルごと与える環境変数たち
 
         ```env:.env.mysql-db-srv
         MYSQL_ROOT_PASSWORD=mysql_serverのルートユーザーパスワード: root
@@ -58,16 +58,16 @@ Windows/Macを対象としてるが、他OSでも行けると思う
         REQ_BODY_MAX_SIZE=リクエストボディのマックスサイズ（50MBなら52428800）: 52428800
         ```
 
-        詳しくはgo-api-srv上でビルドされる[juninry-apiのREADME](https://github.com/unSerori/juninry-api/blob/main/README.md#env)を参照TODO:
+        詳しくはgo-api-srv上でビルドされる[juninry-apiのREADME](https://github.com/unSerori/juninry-api/blob/main/README.md#env)を参照
 
-4. 開発またはデプロイ用のスクリプトでコンテナーを起動TODO:
+4. 開発またはデプロイ用のスクリプトでコンテナーを起動
 
     ```bash
     # 開発用の設定でビルド
-    bash develop-rebuild.sh
+    bash ./cmd/develop-rebuild.sh
 
     # デプロイ用の設定でビルド
-    bash deploy-rebuild.sh
+    bash ./cmd/deploy-rebuild.sh
     ```
 
     その他のスクリプトファイルは[スクリプトファイルたち](#スクリプトファイルたち)
@@ -110,14 +110,56 @@ Windows/Macを対象としてるが、他OSでも行けると思う
     ssh-add
     ```
 
+## ディレクトリ構成
+
+`tree -LFa 3 --dirsfirst`に加筆修正
+
+```txt
+./docker-juninry
+├── .git/
+├── cmd/ ... コンポースに対する処理をまとめたスクリプトたち
+│   ├── balus.sh
+│   ├── deploy-pause.sh
+│   ├── deploy-reboot.sh
+│   ├── deploy-rebuild.sh
+│   ├── deploy-resume.sh
+│   ├── develop-pause.sh
+│   ├── develop-reboot.sh
+│   ├── develop-rebuild.sh
+│   ├── develop-resume.sh
+│   ├── env
+│   └── init.sh
+├── compose/ ... 開発用とデプロイ用のコンポースの定義
+│   ├── .env
+│   ├── compose.deploy.yml
+│   ├── compose.develop.yml
+│   └── compose.yml
+├── services/ ... 各サービスコンテナにコピーしたりvolumesで共有されるリソース
+│   ├── go-api/
+│   │   ├── log/
+│   │   ├── share/
+│   │   ├── .env.go-api
+│   │   ├── Dockerfile
+│   │   └── init.sh
+│   ├── mysql-db/
+│   │   ├── db_data/
+│   │   ├── db_data_dev/
+│   │   └── .env.mysql-db
+│   └── ssh-agent/
+│       ├── Dockerfile
+│       └── init.sh
+├── .gitignore
+└── README.md ... me
+```
+
 ## スクリプトファイルたち
 
 コンテナーを建てたり壊したりする用のスクリプトファイルの説明  
-TODO: ディレクトリ
+`./cmd/`直下に置いてある
 
-- develop-*: go-apiを開発用に建てるときにつかう
+- balus.sh: コンテナーたちを破壊する
 - deploy-*: go-apiをデプロイ用に建てるときにつかう
-- balus.sh: コンテナーたちの破壊する
+- develop-*: go-apiを開発用に建てるときにつかう
 - *-pause.sh: コンテナーたちを停止する
 - *-reboot.sh: コンテナーたちを再起動する
 - *-rebuild.sh: コンテナーたちを再ビルド&起動する

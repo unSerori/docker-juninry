@@ -23,6 +23,7 @@ Desktop.ini
 share/
 log/
 db_data/
+db_data_dev/
 
 # memo
 memo.*
