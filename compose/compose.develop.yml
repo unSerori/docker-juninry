@@ -8,17 +8,17 @@ services: # コンポースするサービスたち
         volumes:  # ボリュームの保持
             - ../services/go-api/share:/root/share # 開発環境
             - "../services/go-api/log/:/root/log/" # log
-            - "ssh-agent-socket:/root/ssh_agent_socket" # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
-        environment: # 環境変数
-            SSH_AUTH_SOCK: /root/ssh_agent_socket/ssh-agent.sock  # 名前付きボリュームで共有されているソケットの場所
+            # - "ssh-agent-socket:/root/ssh_agent_socket" # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
+        # environment: # 環境変数
+        #     SSH_AUTH_SOCK: /root/ssh_agent_socket/ssh-agent.sock  # 名前付きボリュームで共有されているソケットの場所
         ports: # ホストマシンのポートとコンテナのポートをマッピング
             - "${API_DEVELOP_HOST_PORT:-4561}:4561"
-        depends_on: # コンテナ起動順の関係 
-            - ssh-agent-srv # sshしたいコンテナを先に立ち上げる
+        # depends_on: # コンテナ起動順の関係 
+        #     - ssh-agent-srv # sshしたいコンテナを先に立ち上げる
         tty: true # 仮想端末(:ターミナル)をコンテナに提供し、コンテナ内で対話的操作を可能にする # なお、ttyを設定しても、compose.services.service.commandやDockerfile.CMD, ENTRYPOINTでプロセスを指定している場合はそれが終了してしまうと継続できない
         stdin_open: true # コンテナの標準入力の受付オプション、ターミナルで対話できる
-        networks: # 定義したネットワークを利用
-            - juninry_ssh-net # SSHしたいコンテナ間でのネットワーク
+        # networks: # 定義したネットワークを利用
+        #     - juninry_ssh-net # SSHしたいコンテナ間でのネットワーク
 
     mysql-db-srv: # サービス名
         container_name: juninry_dev_mysql-db # コンテナ名
@@ -29,28 +29,28 @@ services: # コンポースするサービスたち
         tty: true # 仮想端末(:ターミナル)をコンテナに提供し、コンテナ内で対話的操作を可能にする # なお、ttyを設定しても、compose.services.service.commandやDockerfile.CMD, ENTRYPOINTでプロセスを指定している場合はそれが終了してしまうと継続できない
         stdin_open: true # コンテナの標準入力の受付オプション、ターミナルで対話できる
 
-    ssh-agent-srv: # サービス名
-        container_name: juninry_dev_ssh-agent # コンテナ名
-        build: # ビルド設定
-            context: ../services/ssh-agent/ # ビルドプロセスが実行されるパス
-            dockerfile: Dockerfile  # Dockerfileのパス
-        environment: # 環境変数
-            SSH_AUTH_SOCK: /root/ssh-agent/ssh_agent_socket/ssh-agent.sock # ソケットの場所
-        image: juninry/ssh-agent:latest # image name
-        volumes: # ボリュームの保持
-            - type: bind  # ssh keyをホストボリュームでホストバインドマウント # short syntaxは、もしホストOSにsourceがなかったら、"ディレクトリ"を作ってしまう
-              source: "${HOST_SSH_PATH:-~/.ssh}"
-              target: "/root/.ssh/"
-              read_only: true
-            - "ssh-agent-socket:/root/ssh-agent/ssh_agent_socket" # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
-        tty: true # 仮想端末(:ターミナル)をコンテナに提供し、コンテナ内で対話的操作を可能にする
-        stdin_open: true # コンテナの標準入力の受付オプション、ターミナルで対話できる
-        restart: always  # コンテナの再起動
-        networks: # 定義したネットワークを利用
-            - juninry_ssh-net # SSHしたいコンテナ間でのネットワーク
+    # ssh-agent-srv: # サービス名
+    #     container_name: juninry_dev_ssh-agent # コンテナ名
+    #     build: # ビルド設定
+    #         context: ../services/ssh-agent/ # ビルドプロセスが実行されるパス
+    #         dockerfile: Dockerfile  # Dockerfileのパス
+    #     environment: # 環境変数
+    #         SSH_AUTH_SOCK: /root/ssh-agent/ssh_agent_socket/ssh-agent.sock # ソケットの場所
+    #     image: juninry/ssh-agent:latest # image name
+    #     volumes: # ボリュームの保持
+    #         - type: bind  # ssh keyをホストボリュームでホストバインドマウント # short syntaxは、もしホストOSにsourceがなかったら、"ディレクトリ"を作ってしまう
+    #           source: "${HOST_SSH_PATH:-~/.ssh}"
+    #           target: "/root/.ssh/"
+    #           read_only: true
+    #         - "ssh-agent-socket:/root/ssh-agent/ssh_agent_socket" # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
+    #     tty: true # 仮想端末(:ターミナル)をコンテナに提供し、コンテナ内で対話的操作を可能にする
+    #     stdin_open: true # コンテナの標準入力の受付オプション、ターミナルで対話できる
+    #     restart: always  # コンテナの再起動
+    #     networks: # 定義したネットワークを利用
+    #         - juninry_ssh-net # SSHしたいコンテナ間でのネットワーク
 
-volumes: # 名前付きボリュームの定義
-    ssh-agent-socket: # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
+# volumes: # 名前付きボリュームの定義
+#     ssh-agent-socket: # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
 
-networks: # ネットワークの定義
-    juninry_ssh-net: # SSHしたいコンテナ間でのネットワーク
+# networks: # ネットワークの定義
+#     juninry_ssh-net: # SSHしたいコンテナ間でのネットワーク

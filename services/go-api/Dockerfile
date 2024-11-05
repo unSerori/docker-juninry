@@ -30,7 +30,9 @@ EXPOSE 4561
 
 # 実行用のスクリプトをコピー
 COPY ./init.sh .
-RUN chmod +x ./init.sh
+# 改行コードを揃えて、権限も変更
+RUN sed -i -e 's/\r//g' ./init.sh && \
+    chmod +x ./init.sh
 
 # スクリプトで起動
 ENTRYPOINT [ "./init.sh" ]
