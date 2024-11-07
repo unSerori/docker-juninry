@@ -7,8 +7,34 @@ services: # コンポースするサービスたち
         image: juninry/go-api:stable # image name
         volumes: # ボリュームの保持
             - ../services/mysql-db/db_data:/var/lib/mysql # DBデータをホストに保持
-        ports: # ホストマシンのポートとコンテナのポートをマッピング 
-            - "${API_DEPLOY_HOST_PORT}:4561"
+        # ports: # ホストマシンのポートとコンテナのポートをマッピング 
+        #      - "${API_DEPLOY_HOST_PORT}:4561"
+        networks: # 定義したネットワークを利用
+            juninry_rev-pxy-net: # リバースプロキシに接続するネットワーク
 
     mysql-db-srv: # サービス名
         container_name: juninry_dep_mysql-db # コンテナ名
+    
+    nginx-rev-pxy-srv: # サービス名
+        container_name: juninry_dep_nginx-rev-pxy # コンテナ名
+        build: # ビルド設定
+            context: ../services/nginx-rev-pxy/ # ビルドプロセスが実行されるパス
+            dockerfile: Dockerfile  # Dockerfileのパス
+        image: juninry/nginx-rev-pxy:stable # image name
+        environment: # 環境変数
+            TZ: ${TZ}
+        volumes:
+            - "../services/nginx-rev-pxy/nginx.conf:/etc/nginx/nginx.conf" # nginxの全般設定
+            - "../services/nginx-rev-pxy/default.conf:/etc/nginx/conf.d/default.conf" # nginxの上書きサーバー設定 # nginx/conf.d/*.confが基本のnginx/nginx.confを上書きする
+            - "../services/nginx-rev-pxy/ssl/:/etc/nginx/ssl/:ro" # SSL証明書や鍵をマウント
+            - "../services/nginx-rev-pxy/statics/:/etc/nginx/static/statics/" # 静的ファイルをマウントしてWeb鯖として利用
+        ports: # ホストマシンのポートとコンテナのポートをマッピング 
+        - "${REV_PXY_HTTP_HOST_PORT:-80}:80" # httpアクセス用のポート
+        - "${REV_PXY_HTTPS_HOST_PORT:-443}:443" # httpsアクセス用のポート(TLS/SSL)
+        depends_on: # コンテナ起動順の関係 
+        - go-api-srv # apiサーバを先に立ち上げる
+        networks: # 定義したネットワークを利用
+            juninry_rev-pxy-net: # リバースプロキシに接続するネットワーク
+
+networks: # ネットワークの定義
+    juninry_rev-pxy-net: # リバースプロキシに接続するネットワーク
