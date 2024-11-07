@@ -1,3 +1,7 @@
+## Pasted from gitignore.io
+
+## Environment-specific items
+
 # Linux/Unix specific temporary files
 .nfs*
 
@@ -15,18 +19,47 @@ Desktop.ini
 .idea/
 .vscode/
 
+## Generic items
+
 # env file
 .env
 *.env*
 
-# volumes
-share/
-log/
-db_data/
-db_data_dev/
+# log
+*.log
+
+# back up
+*.bak
+
+# temp
+*.tmp
+
+# todo
+TODO*
 
 # memo
 memo.*
+
+## Docker-related items
+
+# volumes
+services/go-api/share/
+services/go-api/log/
+services/mysql-db/db_data/
+services/mysql-db/db_data_dev/
+services/nginx-rev-pxy/ssl/
+
+## Project-specific items
+
+# ライブラリなどリポジトリに含める必要のないディレクトリ
+
+# デバッグ時のファイル
+
+# asset direcotry
+
+# upload directory
+
+## Others items
 
 # empty directory
 !.gitignore
