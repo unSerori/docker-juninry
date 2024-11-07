@@ -15,13 +15,14 @@ image: mysql:latest
 
 ## 環境構築
 
-Windows/Macを対象としてるが、他OSでも行けると思う
+Windows/Macを対象としてるが、他OSでも行けると思う  
+プロジェクトをコンテナーの中にcloneするため、ホストOS上の`~/.ssh/`にGitHubに登録済みの鍵があること
 
 1. Dockerをインストール[Docker Hub](https://docs.docker.com/desktop/)
 2. このリポジトリをクローン
 
     ```bash
-    git clone git@github.com:unSerori/ddd.git
+    git clone git@github.com:unSerori/docker-juninry.git
     ```
 
 3. .envファイルを作成
@@ -35,18 +36,18 @@ Windows/Macを対象としてるが、他OSでも行けると思う
         HOST_SSH_PATH=ホストOS上のGitHubに登録済みの鍵ファイルの場所: %USERPROFILE%\.ssh
         ```
 
-    - `./.env.mysql-db-srv.env`: ビルド時にmysql-db-srvコンテナーにcompose.services.service.env_fileでファイルごと与える環境変数たち
+    - `./services/mysql-db/.env.mysql-db`: ビルド時にmysql-db-srvコンテナーにcompose.services.service.env_fileでファイルごと与える環境変数たち
 
-        ```env:.env.mysql-db-srv
+        ```env:.env.mysql-db
         MYSQL_ROOT_PASSWORD=mysql_serverのルートユーザーパスワード: root
         MYSQL_USER=ユーザー名: ddd_user
         MYSQL_PASSWORD=MYSQL_USERのパスワード: ddd_pass
         MYSQL_DATABASE=使用するdatabase名: ddd_db
         ```
 
-    - `./go-api/.env.go-api-srv`: ビルド時にgo-api-srvコンテナーにCOPYされるenvファイル（`コンテナー内にコピーしたいリソースのため、go-api/内に置く`）で、Dockerを使わない場合もこれはjuninry-apiのプロジェクトルートに必要
+    - `./services/go-api/.env.go-api`: ビルド時にgo-api-srvコンテナーにCOPYされるenvファイル（`コンテナー内にコピーしたいリソースのため、go-api/内に置く`）で、Dockerを使わない場合もこれはjuninry-apiのプロジェクトルートに必要
 
-        ```env:.env.go-api-srv
+        ```env:.env.go-api
         MYSQL_USER=DBに接続する際のログインユーザ名: ddd_user
         MYSQL_PASSWORD=パスワード: ddd_pass
         MYSQL_HOST=ログイン先のDBホスト名（dockerだとサービス名）: mysql-db-srv
@@ -60,7 +61,10 @@ Windows/Macを対象としてるが、他OSでも行けると思う
 
         詳しくはgo-api-srv上でビルドされる[juninry-apiのREADME](https://github.com/unSerori/juninry-api/blob/main/README.md#env)を参照
 
-4. 開発またはデプロイ用のスクリプトでコンテナーを起動
+4. デプロイor開発用のセットアップ  
+   後述（[デプロイ用のセットアップ](#デプロイ用のセットアップについて) / [開発用のセットアップ](#開発用のセットアップについて)）
+
+5. デプロイまたは開発用のスクリプトでコンテナーを起動
 
     ```bash
     # 開発用の設定でビルド
@@ -71,6 +75,19 @@ Windows/Macを対象としてるが、他OSでも行けると思う
     ```
 
     その他のスクリプトファイルは[スクリプトファイルたち](#スクリプトファイルたち)
+
+### デプロイ用のセットアップについて
+
+#### SSL証明書発行と配置
+
+HTTPSを使うなら、opensslやCertbot、ACMなどを使って証明書を発行する必要がある  
+ドメインがないなど試験用ならopenssl（オレオレ証明書）、ドメインがあるならCertbot、AWSサービスならACMなどを使うといい  
+
+TODO: nginx-openssl, nginx-_tailscale_funnelをdockerfileマルチビルドとoverride.ymlと起動シェルで場合分け
+
+### 開発用のセットアップについて
+
+とくになし
 
 ### 環境に入る
 
@@ -160,6 +177,7 @@ Windows/Macを対象としてるが、他OSでも行けると思う
 - balus.sh: コンテナーたちを破壊する
 - deploy-*: go-apiをデプロイ用に建てるときにつかう
 - develop-*: go-apiを開発用に建てるときにつかう
+- *-destroy: コンテナーたちを破棄する
 - *-pause.sh: コンテナーたちを停止する
 - *-reboot.sh: コンテナーたちを再起動する
 - *-rebuild.sh: コンテナーたちを再ビルド&起動する
