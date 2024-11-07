@@ -15,4 +15,3 @@ RUN chmod +x ./init.sh
 
 # スクリプトで起動
 ENTRYPOINT ["./init.sh"]
-
