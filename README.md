@@ -26,9 +26,9 @@ Windows/Macを対象としてるが、他OSでも行けると思う
     ```
 
 3. .envファイルを作成
-    - `./compose/.env`: compose.ymlでDockerfileに対する引数として使うものや、プロジェクト全体で使う変数
+    - `./composes/.env`: compose.ymlでDockerfileに対する引数として使うものや、プロジェクト全体で使う変数
 
-        ```env:.env
+        ```env:./composes/.env
         TZ=タイムゾーン: Asia/Tokyo
         MYSQL_DEVELOP_HOST_PORT=開発用のMySQLコンテナのポートをコンテナにマッピングする(ローカル環境のポートなどとの衝突の可能性): 3307
         API_DEVELOP_HOST_PORT=開発用のGo-APIコンテナのポートをコンテナにマッピングする(ローカル環境のポートなどとの衝突の可能性): 4561
@@ -38,7 +38,7 @@ Windows/Macを対象としてるが、他OSでも行けると思う
 
     - `./services/mysql-db/.env.mysql-db`: ビルド時にmysql-db-srvコンテナーにcompose.services.service.env_fileでファイルごと与える環境変数たち
 
-        ```env:.env.mysql-db
+        ```env:./services/mysql-db/.env.mysql-db
         MYSQL_ROOT_PASSWORD=mysql_serverのルートユーザーパスワード: root
         MYSQL_USER=ユーザー名: ddd_user
         MYSQL_PASSWORD=MYSQL_USERのパスワード: ddd_pass
@@ -47,7 +47,7 @@ Windows/Macを対象としてるが、他OSでも行けると思う
 
     - `./services/go-api/.env.go-api`: ビルド時にgo-api-srvコンテナーにCOPYされるenvファイル（`コンテナー内にコピーしたいリソースのため、go-api/内に置く`）で、Dockerを使わない場合もこれはjuninry-apiのプロジェクトルートに必要
 
-        ```env:.env.go-api
+        ```env:./services/go-api/.env.go-api
         MYSQL_USER=DBに接続する際のログインユーザ名: ddd_user
         MYSQL_PASSWORD=パスワード: ddd_pass
         MYSQL_HOST=ログイン先のDBホスト名（dockerだとサービス名）: mysql-db-srv
