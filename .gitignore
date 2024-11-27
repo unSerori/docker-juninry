@@ -43,6 +43,7 @@ memo.*
 ## Docker-related items
 
 # volumes
+services/go-api/juninry-api/
 services/go-api/share/
 services/go-api/log/
 services/mysql-db/db_data/
@@ -56,6 +57,7 @@ services/nginx-rev-pxy/ssl/
 # デバッグ時のファイル
 
 # asset direcotry
+services/go-api/images/
 
 # upload directory
 
