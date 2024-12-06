@@ -6,7 +6,7 @@ services: # コンポースするサービスたち
             target: develop
         image: juninry/go-api_dev:latest # image name
         volumes:  # ボリュームの保持
-            - ../services/go-api/share:/root/share # 開発環境
+            - ../services/go-api/juninry-api:/root/juninry-api # 開発環境
             - "../services/go-api/log/:/root/log/" # log
             - "ssh-agent-socket:/root/ssh_agent_socket" # SSHエージェントソケットを名前付きボリュームでコンテナ間共有
         environment: # 環境変数
