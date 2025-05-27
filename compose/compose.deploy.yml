@@ -9,13 +9,13 @@ services: # コンポースするサービスたち
             - ../services/mysql-db/db_data:/var/lib/mysql # DBデータをホストに保持
         # ports: # ホストマシンのポートとコンテナのポートをマッピング 
         #      - "${API_DEPLOY_HOST_PORT}:4561"
-        restart: always  # コンテナの再起動
+        # restart: always  # コンテナの再起動
         networks: # 定義したネットワークを利用
             juninry_rev-pxy-net: # リバースプロキシに接続するネットワーク
 
     mysql-db-srv: # サービス名
         container_name: juninry_dep_mysql-db # コンテナ名
-        restart: always  # コンテナの再起動
+        # restart: always  # コンテナの再起動
     
     nginx-rev-pxy-srv: # サービス名
         container_name: juninry_dep_nginx-rev-pxy # コンテナ名
@@ -35,7 +35,7 @@ services: # コンポースするサービスたち
           - "${REV_PXY_HTTPS_HOST_PORT:-443}:443" # httpsアクセス用のポート(TLS/SSL)
         depends_on: # コンテナ起動順の関係 
           - go-api-srv # apiサーバを先に立ち上げる
-        restart: always  # コンテナの再起動
+        # restart: always  # コンテナの再起動
         networks: # 定義したネットワークを利用
             juninry_rev-pxy-net: # リバースプロキシに接続するネットワーク
 
